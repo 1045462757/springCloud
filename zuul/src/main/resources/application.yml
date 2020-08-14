@@ -1,0 +1,21 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: api-gateway
+
+zuul:
+  routes:
+    service-product: /product-service/**
+    service-order: /order-service/**
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:9000/eureka/
+      registry-fetch-interval-seconds: 5 # 获取服务列表的周期：5s
+  instance:
+    prefer-ip-address: true #使用ip地址注册
+    ip-address: 127.0.0.1
+
