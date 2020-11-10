@@ -13,9 +13,9 @@ zuul:
 eureka:
   client:
     service-url:
-      defaultZone: http://127.0.0.1:9000/eureka/
-      registry-fetch-interval-seconds: 5 # 获取服务列表的周期：5s
+      defaultZone: http://127.0.0.1:9001/eureka/,http://127.0.0.1:9002/eureka/
+      registry-fetch-interval-seconds: 5 # 鑾峰彇鏈嶅姟鍒楄〃鐨勫懆鏈燂細5s
   instance:
-    prefer-ip-address: true #使用ip地址注册
+    prefer-ip-address: true #浣跨敤ip鍦板潃娉ㄥ唽
     ip-address: 127.0.0.1
 
