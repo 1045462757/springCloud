@@ -1,28 +1,35 @@
-server:
-  port: 9102 #端口
 spring:
   application:
-    name: service-product #服务名称
+    name: service-product
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://localhost:3306/shop?useUnicode=true&characterEncoding=utf8
     username: root
-    password: root
+    password: 614213
   jpa:
     database: MySQL
     show-sql: true
     open-in-view: true
     hibernate:
       ddl-auto: update
-#配置Eureka
+
+server:
+  port: 9101
+
+# 配置EurekaClient
 eureka:
-  client:
-    registerWithEureka: true #服务注册开关
-    fetchRegistry: true #服务发现开关
-    service-url:
-      defaultZone: http://127.0.0.1:9001/eureka/,http://127.0.0.1:9002/eureka/ #多个EurekaServer之间用,隔开
   instance:
-    prefer-ip-address: true #使用ip地址注册
-    instance-id: ${spring.cloud.client.ip-address}:${server.port} #向注册中心中注册服务id
-    lease-renewal-interval-in-seconds: 5 #心跳间隔
-    lease-expiration-duration-in-seconds: 10 #续约到期的时间
+    # 使用ip地址注册,默认为false
+    prefer-ip-address: true
+    # 向注册中心中注册服务id
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}
+    # 心跳间隔,默认30s
+    lease-renewal-interval-in-seconds: 5
+    # 续约到期的时间,默认90s
+    lease-expiration-duration-in-seconds: 10
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      # 多个EurekaServer之间用,隔开
+      defaultZone: http://127.0.0.1:9001/eureka/,http://127.0.0.1:9002/eureka/

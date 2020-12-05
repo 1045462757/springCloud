@@ -1,19 +1,28 @@
 spring:
   application:
     name: eureka-server
+
 server:
-  port: 9001 #端口
-#配置eureka server
+  port: 9001
+
+# 其他EurekaServer的端口
+other:
+  port: 9002
+
+# 配置EurekaServer
 eureka:
   instance:
     hostname: 127.0.0.1
   client:
-#    register-with-eureka: false #是否将自己注册到注册中心
-#    fetch-registry: false #是否从eureka中获取注册信息
-    service-url: #配置暴露给Eureka Client的请求地址
-#      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
-      defaultZone: http://127.0.0.1:9002/eureka/
+    # 是否将自己注册到注册中心,默认为true
+    register-with-eureka: true
+    # 是否从Eureka中获取注册信息,默认为true
+    fetch-registry: true
+    # EurekaClient的请求地址
+    service-url:
+      defaultZone: http://${eureka.instance.hostname}:${other.port}/eureka/
   server:
-    #开发阶段
-    enable-self-preservation: false #关闭自我保护
-    eviction-interval-timer-in-ms: 60000 #剔除服务间隔
+    # 自我保护,默认为开启,开发阶段关闭
+    enable-self-preservation: false
+    # 剔除服务间隔,默认60s
+    eviction-interval-timer-in-ms: 5000
