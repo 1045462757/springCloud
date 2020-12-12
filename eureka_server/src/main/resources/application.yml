@@ -3,11 +3,11 @@ spring:
     name: eureka-server
 
 server:
-  port: 9001
+  port: 9002
 
 # 其他EurekaServer的端口
 other:
-  port: 9002
+  port: 9001
 
 # 配置EurekaServer
 eureka:

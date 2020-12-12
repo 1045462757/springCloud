@@ -1,37 +1,89 @@
-server:
-  port: 8080
 spring:
   application:
     name: api-gate-way
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    database: 0
   cloud:
     gateway:
       routes:
         - id: product-service
           uri: lb://service-product
           predicates:
-            #- Path=/product/**
             - Path=/product-service/**
           filters:
-            - RewritePath=/product-service/(?<segment>.*),/$\{segment} #·����д������
+            #            - name: RequestRateLimiter
+            #              args:
+            #                key-resolver: '#{@pathKeyResolver}'
+            #                # 令牌桶每秒填充平均速率
+            #                redis-rate-limiter.replenishRate: 1
+            #                # 令牌桶上限
+            #                redis-rate-limiter.burstCapacity: 3
+            # 路径重写过滤器
+            - RewritePath=/product-service/(?<segment>.*),/$\{segment}
 
         - id: order-service
           uri: lb://service-order
           predicates:
-            #- Path=/order/**
             - Path=/order-service/**
           filters:
+            - name: RequestRateLimiter
+              args:
+                key-resolver: '#{@userKeyResolver}'
+                # 令牌桶每秒填充平均速率
+                redis-rate-limiter.replenishRate: 1
+                # 令牌桶上限
+                redis-rate-limiter.burstCapacity: 3
             - RewritePath=/order-service/(?<segment>.*),/$\{segment}
-
       discovery:
         locator:
-          enabled: true #�������ݷ��������Զ�ת��
-          lower-case-service-id: true #΢��������Сд
+          # 开启根据服务名称自动转发
+          enabled: true
+          # 微服务名称小写
+          lower-case-service-id: true
+  zipkin:
+    # 使用rabbitmq传输数据则不需要base-url
+    base-url: http://127.0.0.1:9411/
+    sender:
+      # 数据的传输方式，以http请求向server发送数据
+      type: web
+  sleuth:
+    sampler:
+      # 采样比
+      probability: 1
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: guest
+    password: guest
+    # 重试
+    listener:
+      direct:
+        retry:
+          enabled: true
+      simple:
+        retry:
+          enabled: true
+
+server:
+  port: 8080
 
 eureka:
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}
+    lease-renewal-interval-in-seconds: 5
+    lease-expiration-duration-in-seconds: 10
   client:
     service-url:
       defaultZone: http://127.0.0.1:9001/eureka/,http://127.0.0.1:9002/eureka/
-      registry-fetch-interval-seconds: 5 # ��ȡ�����б������ڣ�5s
-  instance:
-    prefer-ip-address: true #ʹ��ip��ַע��
-    ip-address: 127.0.0.1
+      # 获取服务列表的周期：5s
+      registry-fetch-interval-seconds: 5
+
+# 日志
+logging:
+  level:
+    root: info
+    org.springframework.web.servlet.DispatcherServlet: DEBUG
+    org.springframework.cloud.sleuth: DEBUG
