@@ -423,6 +423,61 @@ java -jar zipkin-server-2.12.9-exec.jar --RABBIT_ADDRESSES=127.0.0.1:5672
 
 ## 8.SpringCloudConfig
 
+~~~properties
+# 服务端引入依赖
+<dependency>
+    <groupId>org.springframework.cloud</groupId>
+    <artifactId>spring-cloud-config-server</artifactId>
+</dependency>
+
+# @EnableConfigServer 启动注解
+
+# config-server配置
+spring:
+ cloud:
+  config:
+  	server:
+  	 git:
+  	  uri: https://gitee.com/coder-tiga/config-server.git
+  	  
+  	  
+# 客户端引入依赖  
+<dependency>
+    <groupId>org.springframework.cloud</groupId>
+    <artifactId>spring-cloud-starter-config</artifactId>
+</dependency>
+# 微服务配置 bootstrap.yml
+spring:
+ cloud:
+  config:
+   # 应用名称
+   name: 
+   # 开发环境
+   profile:
+   # 分支
+   label:
+   # config-server地址
+   uri: http://127.0.0.1:10000
+   
+# 客户端配置文件动态刷新
+# 引入依赖
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-actuator</artifactId>
+</dependency>
+
+# 要更新的地方配置@RefreshScope注解开启动态刷新
+
+# 配置文件
+management:
+ endpoints:
+  web:
+   exposure:
+    # 动态刷新post地址 /actuator/refresh
+    include: refresh
+~~~
+
+
 
 
 
