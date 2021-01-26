@@ -20,7 +20,7 @@ eureka:
     fetch-registry: true
     # EurekaClient的请求地址
     service-url:
-      defaultZone: http://${eureka.instance.hostname}:${other.port}/eureka/
+      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
   server:
     # 自我保护,默认为开启,开发阶段关闭
     enable-self-preservation: false

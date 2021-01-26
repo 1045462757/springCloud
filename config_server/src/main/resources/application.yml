@@ -1,0 +1,29 @@
+spring:
+  application:
+    name: config-server
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://gitee.com/coder-tiga/config-server.git
+
+server:
+  port: 10000
+
+# 配置EurekaClient
+eureka:
+  instance:
+    # 使用ip地址注册,默认为false
+    prefer-ip-address: true
+    # 向注册中心中注册服务id
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}
+    # 心跳间隔,默认30s
+    lease-renewal-interval-in-seconds: 5
+    # 续约到期的时间,默认90s
+    lease-expiration-duration-in-seconds: 10
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      # 多个EurekaServer之间用,隔开
+      defaultZone: http://127.0.0.1:9001/eureka/,http://127.0.0.1:9002/eureka/

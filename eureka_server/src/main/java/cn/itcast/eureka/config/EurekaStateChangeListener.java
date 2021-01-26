@@ -35,7 +35,7 @@ public class EurekaStateChangeListener {
 
     @EventListener
     public void listen(EurekaRegistryAvailableEvent event) {
-        log.info("注册中心 启动");
+        log.info("Eureka Server 可用");
     }
 
     @EventListener
