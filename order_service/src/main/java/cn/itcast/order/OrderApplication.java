@@ -1,5 +1,6 @@
 package cn.itcast.order;
 
+import cn.itcast.order.config.StartCommand;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -18,6 +19,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 public class OrderApplication {
 
     public static void main(String[] args) {
+        new StartCommand(args);
         SpringApplication.run(OrderApplication.class, args);
         log.info("OrderApplication Is Running");
     }
