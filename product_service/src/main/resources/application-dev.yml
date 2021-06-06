@@ -1,0 +1,70 @@
+spring:
+  application:
+    name: service-product
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/shop?useUnicode=true&characterEncoding=utf8
+    username: root
+    password: 614213
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    database: 1
+  zipkin:
+    base-url: http://127.0.0.1:9411/
+    sender:
+      # 数据的传输方式，以http请求向server发送数据
+      type: web
+  sleuth:
+    sampler:
+      # 采样比
+      probability: 1
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: guest
+    password: guest
+    # 重试
+    listener:
+      direct:
+        retry:
+          enabled: true
+      simple:
+        retry:
+          enabled: true
+
+# 配置EurekaClient
+eureka:
+  instance:
+    # 使用ip地址注册,默认为false
+    prefer-ip-address: true
+    # 向注册中心中注册服务id
+    instance-id: ${spring.application.name}:${spring.cloud.client.ip-address}:${server.port}
+    # 心跳间隔,默认30s
+    lease-renewal-interval-in-seconds: 5
+    # 续约到期的时间,默认90s
+    lease-expiration-duration-in-seconds: 10
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    registry-fetch-interval-seconds: 5
+    service-url:
+      # 多个EurekaServer之间用,隔开
+      defaultZone: http://root:root@127.0.0.1:9001/eureka/,
+
+# 日志
+logging:
+  level:
+    root: info
+    cn.itcast.product: DEBUG
+    org.springframework.web.servlet.DispatcherServlet: DEBUG
+    org.springframework.cloud.sleuth: DEBUG
+
+mybatis:
+  mapper-locations: classpath:/mappers/*Mapper.xml
+  type-aliases-package: cn.itcast.product.domain
+
+redis:
+  expiration:
+    time: 1
+    timeUnit: DAYS

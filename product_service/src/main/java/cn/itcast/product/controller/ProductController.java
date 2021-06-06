@@ -1,13 +1,15 @@
 package cn.itcast.product.controller;
 
-import cn.itcast.product.entity.Product;
+import cn.itcast.product.domain.Product;
 import cn.itcast.product.service.ProductService;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.Objects;
 
+/**
+ * @author 10454
+ */
 @RestController
 @RequestMapping("/product")
 public class ProductController {
@@ -15,25 +17,34 @@ public class ProductController {
     @Resource
     private ProductService productService;
 
-    @Value("${server.port}")
-    private String port;
-
-    @Value("${spring.cloud.client.ip-address}") //spring cloud 自动的获取当前应用的ip地址
-    private String ip;
-
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public Product findById(@PathVariable Long id) {
-        Product product = productService.findById(id);
-        product.setProductName(ip + ":" + port);
-        return product;
+    @GetMapping(value = "/{id}")
+    public Product findById(@PathVariable("id") Integer id) {
+        return productService.findById(id);
     }
 
-    @RequestMapping(value = "", method = RequestMethod.POST)
+    @PostMapping
     public String save(@RequestBody Product product) {
-        if (Objects.isNull(product)) {
-            return "没有数据";
+        Product byId = productService.findById(product.getId());
+        if (Objects.nonNull(byId)) {
+            return "已存在";
         }
         productService.save(product);
         return "保存成功";
+    }
+
+    @DeleteMapping(value = "/{id}")
+    public String delete(@PathVariable("id") Integer id) {
+        productService.delete(id);
+        return "删除成功";
+    }
+
+    @PutMapping
+    public String update(@RequestBody Product product) {
+        Product byId = productService.findById(product.getId());
+        if (Objects.isNull(byId)) {
+            return "不存在";
+        }
+        productService.update(product);
+        return "修改成功";
     }
 }

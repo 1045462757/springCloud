@@ -30,3 +30,7 @@ eureka:
     enable-self-preservation: false
     # 剔除服务间隔,默认60s
     eviction-interval-timer-in-ms: 5000
+
+logging:
+  level:
+    com.netflix: warn

@@ -1,4 +1,4 @@
-package cn.itcast.gateway.config;
+package cn.itcast.gateway.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,6 +15,6 @@ public class FallBackController {
 
     @GetMapping("/fallback")
     public String fallback() {
-        return "fallback";
+        return "服务暂时不可用，请稍后再试！";
     }
 }

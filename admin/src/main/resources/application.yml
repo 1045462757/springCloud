@@ -1,0 +1,33 @@
+spring:
+  application:
+    name: admin
+  security:
+    user:
+      name: root
+      password: root
+  boot:
+    admin:
+      client:
+        url: http://127.0.0.1:8080
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+
+server:
+  port: 8080
+
+eureka:
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.application.name}:${spring.cloud.client.ip-address}:${server.port}
+    lease-renewal-interval-in-seconds: 5
+    lease-expiration-duration-in-seconds: 10
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    registry-fetch-interval-seconds: 5
+    service-url:
+      defaultZone: http://root:root@127.0.0.1:9001/eureka/,http://root:root@127.0.0.1:9002/eureka/

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.itcast.product.mapper.ProductMapper">
+
+    <resultMap id="BaseResultMap" type="Product">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="inventory" jdbcType="INTEGER" property="inventory"/>
+        <result column="price" jdbcType="DECIMAL" property="price"/>
+        <result column="product_desc" jdbcType="VARCHAR" property="productDesc"/>
+        <result column="product_name" jdbcType="VARCHAR" property="productName"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="Product">
+        insert into tb_product (id,inventory,price,product_desc,product_name,status) values
+            (#{id,jdbcType=INTEGER},#{inventory,jdbcType=INTEGER},#{price,jdbcType=DECIMAL},#{productDesc,jdbcType=VARCHAR},
+            #{productName,jdbcType=VARCHAR},#{status,jdbcType=INTEGER});
+    </insert>
+
+    <delete id="delete" parameterType="java.lang.Integer">
+        delete from tb_product where id = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <update id="update" parameterType="Product">
+        update tb_product set product_name = #{productName,jdbcType=VARCHAR} where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <select id="get" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select * from tb_product where id = #{id,jdbcType=INTEGER}
+    </select>
+
+</mapper>
